@@ -1,0 +1,52 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
+
+    defaultConfig {
+        applicationId "com.rq.autoscrollbullet"
+        minSdkVersion 19
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    sourceSets {
+        main {
+            // AndroidStudio的so默认放在'jniLibs'中,Eclipse是放在'libs'中
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:2.0.4'
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+
+    // fresco 基础包
+    implementation 'com.facebook.fresco:fresco:1.5.0'
+    // 支持 GIF 动图
+    implementation 'com.facebook.fresco:animated-gif:1.5.0'
+    // 支持 WebP(静态图+动图)
+    // https://www.fresco-cn.org/docs/webp-support.html
+    implementation 'com.facebook.fresco:webpsupport:1.5.0'
+    implementation 'com.facebook.fresco:animated-webp:1.5.0'
+
+    implementation 'com.google.code.gson:gson:2.8.6'
+
+    implementation project(':library')
+}

@@ -25,7 +25,7 @@ public class HandlerEngine<T> extends Thread{
     /**
      * 弹幕执行一次所需的时间
      */
-    private static final long DURATION_MILLIS = 5000;
+    private static final long DURATION_MILLIS = 7500;
 
     private static final Object LOCK = new Object();
 
@@ -48,15 +48,15 @@ public class HandlerEngine<T> extends Thread{
     }
 
     public void addAllData(List<T> currentDataList, IBulletHelper<T> helper){
+        this.helper = helper;
         this.cacheDataList.addAll(currentDataList);
         this.handleQueue.addAll(currentDataList);
-        this.helper = helper;
     }
 
     public void addData(T data, IBulletHelper<T> helper){
+        this.helper = helper;
         this.cacheDataList.add(data);
         this.handleQueue.add(data);
-        this.helper = helper;
     }
 
     @Override
@@ -91,6 +91,13 @@ public class HandlerEngine<T> extends Thread{
                                 }
                             });
                         }
+
+                        @Override
+                        public void onError() {
+                            synchronized (LOCK){
+                                LOCK.notify();
+                            }
+                        }
                     });
                     bulletView.executeAddView();
                     long time = System.currentTimeMillis();
@@ -100,6 +107,7 @@ public class HandlerEngine<T> extends Thread{
                     long diffTime = System.currentTimeMillis() - time;
                     waitTime = waitTime - diffTime;
                     Thread.sleep(waitTime <0? 0: waitTime);
+                    waitTime = 0; // 重置waitTime
                     bulletView.executeAnimation();
                 }
             } catch (InterruptedException e) {

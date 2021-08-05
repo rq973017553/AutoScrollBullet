@@ -145,6 +145,9 @@ public class BulletView<T>{
      * 对外接口，用于获取自定义View
      */
     interface OnBindViewListener{
+
         void onView(View view);
+
+        void onError();
     }
 }

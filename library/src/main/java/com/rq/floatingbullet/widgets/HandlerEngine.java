@@ -74,7 +74,7 @@ public class HandlerEngine<T> extends Thread{
                 final ViewGroup container = weakContainer.get();
                 if (container != null){
                     T data = handleQueue.take();
-                    BulletView<T> bulletView = new BulletView<>(container, data, helper);
+                    BulletView<T> bulletView = new BulletView<>(weakContainer, data, helper);
                     bulletView.setDurationMillis(DURATION_MILLIS);
                     bulletView.setOnBindViewListener(new BulletView.OnBindViewListener() {
                         @Override

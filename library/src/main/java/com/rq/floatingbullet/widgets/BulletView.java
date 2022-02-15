@@ -15,6 +15,8 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
 
+import java.lang.ref.WeakReference;
+
 public class BulletView<T>{
 
     private static final Handler sHandler = new Handler(Looper.getMainLooper());
@@ -25,10 +27,10 @@ public class BulletView<T>{
 
     private View currentView;
 
-    private ViewGroup container;
+    private WeakReference<ViewGroup> weakContainer;
 
-    public BulletView(ViewGroup container, T data, IBulletHelper<T> helper) {
-        this.container = container;
+    public BulletView(WeakReference<ViewGroup> container, T data, IBulletHelper<T> helper) {
+        this.weakContainer = container;
         if (helper != null){
             currentView = helper.getView(data);
         }
@@ -46,6 +48,7 @@ public class BulletView<T>{
         sHandler.post(new Runnable() {
             @Override
             public void run() {
+                ViewGroup container = weakContainer.get();
                 if (container != null && currentView != null){
                     container.addView(currentView, new ViewGroup.LayoutParams(
                             ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -62,6 +65,7 @@ public class BulletView<T>{
         sHandler.post(new Runnable() {
             @Override
             public void run() {
+                final ViewGroup container = weakContainer.get();
                 if (container != null && currentView != null){
                     AnimatorSet animatorSet = getDefaultAnimator(container, currentView);
                     animatorSet.addListener(new AnimatorListenerAdapter() {
